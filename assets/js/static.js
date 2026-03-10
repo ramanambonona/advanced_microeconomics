@@ -41,6 +41,10 @@ document.addEventListener('DOMContentLoaded', function() {
     let lastStaticResult = null;
     let lastStaticProblemData = null;
 
+    function appendHTML(container, html) {
+        container.insertAdjacentHTML('beforeend', html);
+    }
+
     // Initialize the form
     initializeForm();
 
@@ -437,7 +441,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
             `;
-            resultsDiv.innerHTML += focsHTML;
+            appendHTML(resultsDiv, focsHTML);
         }
 
         // Display solution
@@ -455,7 +459,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
             `;
-            resultsDiv.innerHTML += solutionHTML;
+            appendHTML(resultsDiv, solutionHTML);
         }
 
         // Display elasticities
@@ -571,7 +575,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function showLoading(message = 'Résolution en cours...') {
         loadingDiv.classList.remove('hidden');
         if (message) {
-            loadingDiv.querySelector('p').textContent = message;
+            const loadingText = loadingDiv.querySelector('p');
+            if (loadingText) {
+                loadingText.textContent = message;
+            }
         }
     }
 
@@ -605,7 +612,4 @@ document.addEventListener('DOMContentLoaded', function() {
             feather.replace();
         }
     }
-
-    // Initialize the form when the page loads
-    initializeForm();
 });

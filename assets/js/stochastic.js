@@ -27,6 +27,10 @@ document.addEventListener('DOMContentLoaded', function() {
     let lastStochasticResult = null;
     let lastStochasticProblemData = null;
 
+    function appendHTML(container, html) {
+        container.insertAdjacentHTML('beforeend', html);
+    }
+
     // Initialize
     initializeForm();
 
@@ -391,7 +395,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
             `;
-            resultsDiv.innerHTML += matrixHTML;
+            appendHTML(resultsDiv, matrixHTML);
         }
 
         // Display stationary distribution
@@ -416,7 +420,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
             `;
-            resultsDiv.innerHTML += stationaryHTML;
+            appendHTML(resultsDiv, stationaryHTML);
         }
 
         // Display Euler equations
@@ -448,7 +452,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
             `;
-            resultsDiv.innerHTML += valueFunctionsHTML;
+            appendHTML(resultsDiv, valueFunctionsHTML);
         }
 
         // Display policy functions by state
@@ -478,7 +482,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
             `;
-            resultsDiv.innerHTML += policyHTML;
+            appendHTML(resultsDiv, policyHTML);
         }
 
         // Display steps if available
@@ -583,7 +587,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function showLoading(message = 'Résolution en cours...') {
         loadingDiv.classList.remove('hidden');
         if (message) {
-            loadingDiv.querySelector('p').textContent = message;
+            const loadingText = loadingDiv.querySelector('p');
+            if (loadingText) {
+                loadingText.textContent = message;
+            }
         }
     }
 
@@ -614,7 +621,4 @@ document.addEventListener('DOMContentLoaded', function() {
             feather.replace();
         }
     }
-
-    // Initialize the form when the page loads
-    initializeForm();
 });

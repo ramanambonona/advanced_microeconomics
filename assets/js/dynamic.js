@@ -16,6 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
     let lastDynamicResult = null;
     let lastDynamicProblemData = null;
 
+    function appendHTML(container, html) {
+        container.insertAdjacentHTML('beforeend', html);
+    }
+
     // Initialize
     initializeForm();
 
@@ -204,7 +208,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
             `;
-            resultsDiv.innerHTML += steadyStateHTML;
+            appendHTML(resultsDiv, steadyStateHTML);
         }
 
         // Display value function (if available)
@@ -217,7 +221,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
             `;
-            resultsDiv.innerHTML += valueFunctionHTML;
+            appendHTML(resultsDiv, valueFunctionHTML);
         }
 
         // Display policy functions
@@ -235,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
             `;
-            resultsDiv.innerHTML += policyHTML;
+            appendHTML(resultsDiv, policyHTML);
         }
 
         // Display steps if available
@@ -284,7 +288,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
             `;
-            resultsDiv.innerHTML += timePathHTML;
+            appendHTML(resultsDiv, timePathHTML);
         }
     }
 
@@ -325,7 +329,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function showLoading(message = 'Résolution en cours...') {
         loadingDiv.classList.remove('hidden');
         if (message) {
-            loadingDiv.querySelector('p').textContent = message;
+            const loadingText = loadingDiv.querySelector('p');
+            if (loadingText) {
+                loadingText.textContent = message;
+            }
         }
     }
 
@@ -355,7 +362,4 @@ document.addEventListener('DOMContentLoaded', function() {
             feather.replace();
         }
     }
-
-    // Initialize the form when the page loads
-    initializeForm();
 });
