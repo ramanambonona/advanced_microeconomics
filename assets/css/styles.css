@@ -1,0 +1,168 @@
+ /* Advanced Microeconomics Solver - Styles communs */
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Navigation fixe */
+.navbar-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+/* Menu mobile */
+.mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.navbar-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 300px;
+    background: white;
+    z-index: 1000;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+}
+
+.navbar-menu.active {
+    transform: translateX(0);
+}
+
+/* Styles pour les équations mathématiques */
+.math-equation {
+    font-family: 'Times New Roman', serif;
+    font-style: italic;
+}
+
+.equation-block {
+    background: #f8f9fa;
+    border-left: 4px solid #8B1E3F;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 0 4px 4px 0;
+}
+
+/* Styles pour les résultats */
+.result-success {
+    background: #d1fae5;
+    border: 1px solid #10b981;
+    color: #065f46;
+}
+
+.result-error {
+    background: #fee2e2;
+    border: 1px solid #ef4444;
+    color: #7f1d1d;
+}
+
+.result-warning {
+    background: #fef3c7;
+    border: 1px solid #f59e0b;
+    color: #92400e;
+}
+
+/* Loading spinner */
+.spinner {
+    border: 2px solid #f3f4f6;
+    border-top: 2px solid #8B1E3F;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Styles responsifs */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .grid-cols-1-mobile {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Styles pour les cartes */
+.card {
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Styles pour les boutons */
+.btn-primary {
+    background: #8B1E3F;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: #6E1632;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: white;
+    color: #8B1E3F;
+    border: 2px solid #8B1E3F;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: #8B1E3F;
+    color: white;
+}
+
+/* Garantir que la vidéo dépasse proprement */
+#navbar .flex.items-center.space-x-2 {
+    position: relative;
+    z-index: 100;
+}
+
+/* Effet de superposition contrôlé */
+.video-container {
+    position: relative;
+    z-index: 20;
+}
+
+/* Option : légère ombre portée pour mieux détacher la vidéo */
+video[aria-label="Logo vidéo AMS"] {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}

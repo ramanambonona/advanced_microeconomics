@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Microeconomics Solver | Ramanambonona Ambinintsoa</title>
+    <link rel="icon" type="image/svg+xml" href="assets/images/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <style>
+        body {
+            font-family: 'Palatino Linotype', 'Palatino', 'URW Palladio L', serif;
+        }
+        .bg-grenat {
+            background-color: #8B1E3F;
+        }
+        .text-grenat {
+            color: #8B1E3F;
+        }
+        .border-grenat {
+            border-color: #8B1E3F;
+        }
+        .hover\:bg-grenat:hover {
+            background-color: #6E1632;
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .result-fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .download-btn {
+            transition: all 0.3s ease;
+        }
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .math-equation {
+            font-family: 'Times New Roman', serif;
+            padding: 10px;
+            margin: 10px 0;
+            text-align: center;
+            overflow-x: auto;
+        }
+        .equation-block {
+            background: #f8f9fa;
+            border-left: 4px solid #8B1E3F;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 4px 4px 0;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body class="bg-pink-50 min-h-screen">
+    <!-- Navigation Topbar fixe -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 bg-grenat text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                    <img src="./assets/images/logo.png" alt="Logo AMS" class="w-40 h-10 object-cover rounded-md">
+                    <span class="text-xl font-bold hidden md:block">Advanced Microeconomics Solver</span>
+            </div>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="index.html" class="text-pink-200 font-medium underline">Accueil</a>
+                <a href="static.html" class="hover:text-pink-200 font-medium">Statique</a>
+                <a href="dynamic.html" class="hover:text-pink-200 font-medium">Intertemporel</a>
+                <a href="stochastic.html" class="hover:text-pink-200 font-medium">Stochastique</a>
+                <a href="documentation.html" class="hover:text-pink-200 font-medium">Documentation</a>
+
+            </div>
+            <button id="mobileMenuButton" class="md:hidden">
+                <i data-feather="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Menu mobile -->
+    <div id="mobileMenuOverlay" class="mobile-menu-overlay hidden"></div>
+    <div id="mobileMenu" class="navbar-menu hidden">
+        <div class="p-4">
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-grenat font-bold text-lg">AMS</span>
+                <button id="closeMobileMenu">
+                    <i data-feather="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <a href="index.html" class="block py-2 text-gray-700 hover:text-grenat font-medium">Accueil</a>
+                <a href="static.html" class="block py-2 text-gray-700 hover:text-grenat">Statique</a>
+                <a href="dynamic.html" class="block py-2 text-gray-700 hover:text-grenat">Intertemporel</a>
+                <a href="stochastic.html" class="block py-2 text-gray-700 hover:text-grenat">Stochastique</a>
+                <a href="documentation.html" class="block py-2 text-gray-700 hover:text-grenat">Documentation</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="pt-20 pb-16 px-4 bg-gradient-to-r from-grenat to-pink-700 text-white">
+        <div class="container mx-auto text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 fade-in text-gray-700">Advanced Microeconomics Solver</h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-700 fade-in" style="animation-delay: 0.2s">
+                Solveur pour l'optimisation microéconomique d'ordre n et temps t
+            </p>
+            <div class="flex flex-col md:flex-row justify-center gap-4 fade-in" style="animation-delay: 0.4s">
+                <a href="static.html" class="bg-white text-grenat px-8 py-4 rounded-lg font-bold hover:bg-gray-100 transition transform hover:-translate-y-1 shadow-lg flex items-center justify-center">
+                    <i data-feather="target" class="mr-2"></i>
+                    Statique
+                </a>
+                <a href="dynamic.html" class="bg-grenat text-white px-8 py-4 rounded-lg font-bold hover:bg-grenat-800 transition transform hover:-translate-y-1 shadow-lg border-2 border-white flex items-center justify-center">
+                    <i data-feather="trending-up" class="mr-2"></i>
+                    Intertemporel
+                </a>
+                <a href="stochastic.html" class="bg-pink-600 text-white px-8 py-4 rounded-lg font-bold hover:bg-pink-700 transition transform hover:-translate-y-1 shadow-lg border-2 border-white flex items-center justify-center">
+                    <i data-feather="bar-chart-2" class="mr-2"></i>
+                    Stochastique
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Overview -->
+    <section class="py-16 px-4 bg-white">
+        <div class="container mx-auto">
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <div class="text-center fade-in">
+                    <div class="bg-grenat text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-feather="cpu" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Calcul Symbolique Avancé</h3>
+                    <p class="text-gray-600">Résolution avec SymPy, support des paramètres symboliques et expressions mathématiques complexes</p>
+                </div>
+                <div class="text-center fade-in" style="animation-delay: 0.1s">
+                    <div class="bg-grenat text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-feather="layers" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Généralisation d'Ordre n</h3>
+                    <p class="text-gray-600">Support pour n biens, t périodes temporelles, et états stochastiques avec matrices de transition</p>
+                </div>
+                <div class="text-center fade-in" style="animation-delay: 0.2s">
+                    <div class="bg-grenat text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-feather="download" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Download</h3>
+                    <p class="text-gray-600">Téléchargement des solutions en LaTeX et PDF avec étapes détaillées et représentations graphiques</p>
+                </div>
+            </div>
+
+            <!-- Mathematical Capabilities -->
+            <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8 border border-blue-200 fade-in" style="animation-delay: 0.3s">
+                <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">Exemples</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="text-center">
+                        <div class="math-equation bg-white rounded-lg p-4 shadow-sm">
+                            $$ k x_1^{\alpha_1}...x_n^{\alpha_n}$$
+                            <p class="text-sm text-gray-600 mt-2">Cobb-Douglas</p>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="math-equation bg-white rounded-lg p-4 shadow-sm">
+                            $$\min\left(\frac{x_1}{a_1},..., \frac{x_n}{a_n}\right)$$
+                            <p class="text-sm text-gray-600 mt-2">Leontief</p>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="math-equation bg-white rounded-lg p-4 shadow-sm">
+                            $$\max \sum_{t=0}^\infty \beta^t U(c_t)$$
+                            <p class="text-sm text-gray-600 mt-2">Dynamique</p>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="math-equation bg-white rounded-lg p-4 shadow-sm">
+                            $$\mathbb{E}[V(s')]$$
+                            <p class="text-sm text-gray-600 mt-2">Stochastique</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modules Section -->
+    <section class="py-16 px-4 bg-gray-50">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Modules du Solver</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Module Statique -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border border-pink-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 fade-in module-card">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-xs font-semibold px-3 py-1 rounded-full bg-grenat text-white">STATIQUE</span>
+                            <div class="flex space-x-1">
+                                <span class="w-2 h-2 bg-green-400 rounded-full"></span>
+                                <span class="w-2 h-2 bg-yellow-400 rounded-full"></span>
+                                <span class="w-2 h-2 bg-red-400 rounded-full"></span>
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-xl mb-3 text-grenat">Optimisation Statique</h3>
+                        <p class="text-gray-600 mb-4">Résolution de problèmes d'optimisation statique d'ordre n avec différentes fonctions d'utilité.</p>
+                        <ul class="text-sm text-gray-600 mb-4 space-y-2">
+                            <li class="flex items-center">
+                                <i data-feather="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                <span>Cobb-Douglas, Leontief, CES, CRRA, CARA</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i data-feather="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                <span>Demandes Marshalliennes et Hicksiennes</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i data-feather="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                <span>Élasticités, TMS, Effets revenu/prix</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i data-feather="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                <span>Lemme de Shepard, Identité de Roy</span>
+                            </li>
+                        </ul>
+                        <div class="flex justify-between items-center">
+                            <a href="static.html" class="text-grenat font-medium hover:text-grenat-800 flex items-center text-sm">
+                                Accéder au module
+                                <i data-feather="chevron-right" class="w-4 h-4 ml-1"></i>
+                            </a>
+                            <span class="text-xs text-gray-500">Ordre n biens</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Module Dynamique -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border border-pink-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 fade-in module-card" style="animation-delay: 0.1s">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-xs font-semibold px-3 py-1 rounded-full bg-grenat text-white">DYNAMIQUE</span>
+                            <div class="flex space-x-1">
+                                <span class="w-2 h-2 bg-green-400 rounded-full"></span>
+                                <span class="w-2 h-2 bg-yellow-400 rounded-full"></span>
+                                <span class="w-2 h-2 bg-red-400 rounded-full"></span>
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-xl mb-3 text-grenat">Optimisation Intertemporelle</h3>
+                        <p class="text-gray-600 mb-4">Optimisation dynamique en temps discret et continu avec facteur d'escompte.</p>
+                        <ul class="text-sm text-gray-600 mb-4 space-y-2">
+                            <li class="flex items-center">
+                                <i data-feather="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                <span>Problèmes à horizon fini/infini</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i data-feather="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                <span>Conditions d'Euler et Bellman</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i data-feather="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                <span>État stationnaire et sentier optimal</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i data-feather="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                <span>Contrôle optimal et programmation dynamique</span>
+                            </li>
+                        </ul>
+                        <div class="flex justify-between items-center">
+                            <a href="dynamic.html" class="text-grenat font-medium hover:text-grenat-800 flex items-center text-sm">
+                                Accéder au module
+                                <i data-feather="chevron-right" class="w-4 h-4 ml-1"></i>
+                            </a>
+                            <span class="text-xs text-gray-500">Ordre t périodes</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Module Stochastique -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border border-pink-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 fade-in module-card" style="animation-delay: 0.2s">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-xs font-semibold px-3 py-1 rounded-full bg-grenat text-white">STOCHASTIQUE</span>
+                            <div class="flex space-x-1">
+                                <span class="w-2 h-2 bg-green-400 rounded-full"></span>
+                                <span class="w-2 h-2 bg-yellow-400 rounded-full"></span>
+                                <span class="w-2 h-2 bg-red-400 rounded-full"></span>
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-xl mb-3 text-grenat">Optimisation Stochastique</h3>
+                        <p class="text-gray-600 mb-4">Optimisation sous incertitude avec processus Markoviens et espérances.</p>
+                        <ul class="text-sm text-gray-600 mb-4 space-y-2">
+                            <li class="flex items-center">
+                                <i data-feather="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                <span>Chocs Markoviens discrets</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i data-feather="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                <span>Équations d'Euler stochastiques</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i data-feather="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                <span>Simulation Monte Carlo</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i data-feather="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                <span>Distribution stationnaire</span>
+                            </li>
+                        </ul>
+                        <div class="flex justify-between items-center">
+                            <a href="stochastic.html" class="text-grenat font-medium hover:text-grenat-800 flex items-center text-sm">
+                                Accéder au module
+                                <i data-feather="chevron-right" class="w-4 h-4 ml-1"></i>
+                            </a>
+                            <span class="text-xs text-gray-500">S états</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Features -->
+    <section class="py-16 px-4 bg-white">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Fonctionnalités Techniques</h2>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="text-center feature-card">
+                    <div class="bg-grenat text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-feather="code"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Backend Python</h3>
+                    <p class="text-gray-600 text-sm">FastAPI, SymPy, NumPy, SciPy - Calcul symbolique et numérique</p>
+                </div>
+                
+                <div class="text-center feature-card" style="animation-delay: 0.1s">
+                    <div class="bg-grenat text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-feather="smartphone"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Frontend Moderne</h3>
+                    <p class="text-gray-600 text-sm">Tailwind CSS, JavaScript ES6+ - Interface responsive et interactive</p>
+                </div>
+                
+                <div class="text-center feature-card" style="animation-delay: 0.2s">
+                    <div class="bg-grenat text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-feather="bar-chart"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Visualisation</h3>
+                    <p class="text-gray-600 text-sm">MathJax pour le rendu LaTeX, graphiques interactifs</p>
+                </div>
+                
+                <div class="text-center feature-card" style="animation-delay: 0.3s">
+                    <div class="bg-grenat text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-feather="book-open"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Pédagogique</h3>
+                    <p class="text-gray-600 text-sm">Étapes détaillées, explications théoriques, exemples guidés</p>
+                </div>
+            </div>
+
+            <!-- API Status -->
+            <div class="mt-16 bg-gray-50 rounded-2xl p-8 border border-gray-200 text-center">
+                <h3 class="text-2xl font-bold mb-4 text-gray-800">Statut du Service</h3>
+                <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8">
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+                        <span class="text-gray-700">Backend: <span class="font-semibold text-green-600">En ligne</span></span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                        <span class="text-gray-700">Base de données: <span class="font-semibold text-green-600">Opérationnelle</span></span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                        <span class="text-gray-700">Calcul symbolique: <span class="font-semibold text-green-600">Actif</span></span>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-600 mt-4">
+                    Serveur déployé sur Render - Disponible 24/7 pour la recherche et l'enseignement
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start Section -->
+    <section class="py-16 px-4 bg-gradient-to-r from-grenat to-pink-700 text-white">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-6 text-gray-800">Prêt à Commencer ?</h2>
+            <p class="text-xl mb-8 max-w-2xl mx-auto text-gray-800">
+                Choisissez un module pour résoudre vos problèmes d'optimisation microéconomique
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="static.html" class="bg-white text-grenat px-6 py-3 rounded-lg font-bold hover:bg-gray-100 transition flex items-center justify-center">
+                    <i data-feather="play" class="mr-2"></i>
+                    Démarrer avec Statique
+                </a>
+                <a href="documentation.html" class="border-2 border-white text-grenat px-6 py-3 rounded-lg font-bold hover:bg-white hover:text-grenat transition flex items-center justify-center">
+                    <i data-feather="book" class="mr-2"></i>
+                    Voir la Documentation
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12 px-4">
+        <div class="container mx-auto">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="font-bold text-lg mb-4 flex items-center">
+                        <span class="text-grenat mr-2 text-xl">AMS</span>
+                        <span>Advanced Microeconomics Solver</span>
+                    </h3>
+                    <p class="text-gray-400 mb-4">Solver symbolique généralisé pour l'optimisation microéconomique.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4 text-lg">Modules</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="static.html" class="hover:text-white transition flex items-center">
+                            <i data-feather="chevron-right" class="w-4 h-4 mr-2"></i>
+                            Statique
+                        </a></li>
+                        <li><a href="dynamic.html" class="hover:text-white transition flex items-center">
+                            <i data-feather="chevron-right" class="w-4 h-4 mr-2"></i>
+                            Intertemporel
+                        </a></li>
+                        <li><a href="stochastic.html" class="hover:text-white transition flex items-center">
+                            <i data-feather="chevron-right" class="w-4 h-4 mr-2"></i>
+                            Stochastique
+                        </a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4 text-lg">Documentation</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="documentation.html" class="hover:text-white transition flex items-center">
+                            <i data-feather="chevron-right" class="w-4 h-4 mr-2"></i>
+                            Guide d'utilisation
+                        </a></li>
+                        <li><a href="documentation.html#theory" class="hover:text-white transition flex items-center">
+                            <i data-feather="chevron-right" class="w-4 h-4 mr-2"></i>
+                            Théorie économique
+                        </a></li>
+                        <li><a href="documentation.html#examples" class="hover:text-white transition flex items-center">
+                            <i data-feather="chevron-right" class="w-4 h-4 mr-2"></i>
+                            Exemples pratiques
+                        </a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4 text-lg">Développement</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center">
+                            <i data-feather="code" class="w-4 h-4 mr-2"></i>
+                            <a href="https://github.com/ramanambonona/advanced_microeconomics_solver_backend" class="hover:text-white transition">SymPy, FastAPI</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i data-feather="github" class="w-4 h-4 mr-2"></i>
+                            <a href="https://github.com/ramanambonona/advanced_microeconomics_solver_frontend" class="hover:text-white transition">Open Source</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i data-feather="book-open" class="w-4 h-4 mr-2"></i>
+                            <a href="documentation.html" class="hover:text-white transition">Documentation</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+           <div class="flex justify-center space-x-3 mt-6">
+                <a href="https://github.com/ramanambonona/" target="_blank" rel="noopener noreferrer" aria-label="Lien vers GitHub">
+                    <div class="bg-grenat hover:bg-pink-600 transition duration-300 rounded-full p-3 shadow-lg">
+                        <i data-feather="github" class="w-6 h-6 text-white"></i>
+                    </div>
+                </a>
+                <a href="http://linkedin.com/in/ambinintsoa-ramanambonona" target="_blank" rel="noopener noreferrer" aria-label="Lien vers LinkedIn">
+                    <div class="bg-grenat hover:bg-pink-600 transition duration-300 rounded-full p-3 shadow-lg">
+                        <i data-feather="linkedin" class="w-6 h-6 text-white"></i>
+                    </div>
+                </a>
+                <a href="/cdn-cgi/l/email-protection#99f8f4fbf0f7f0f7edeaf6f8b7ecf8edb7fcf8fdabd9fef4f8f0f5b7faf6f4" aria-label="Envoyer un email">
+                    <div class="bg-grenat hover:bg-pink-600 transition duration-300 rounded-full p-3 shadow-lg">
+                        <i data-feather="mail" class="w-6 h-6 text-white"></i>
+                    </div>
+                </a>
+            </div>
+			<div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+                <p>© 2025 Advanced Microeconomics Solver. Ramanambonona Ambinintsoa, PhD.</p>
+            </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="assets/js/api.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script>
+        // Configuration MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                packages: {'[+]': ['ams', 'color']}
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+                renderActions: {
+                    addMenu: [0, '', '']
+                }
+            },
+            startup: {
+                pageReady: () => {
+                    return MathJax.startup.defaultPageReady().then(() => {
+                        console.log('MathJax initialized successfully');
+                    });
+                }
+            }
+        };
+
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Trigger fade-in animations
+            setTimeout(() => {
+                document.querySelectorAll('.fade-in').forEach(el => {
+                    el.classList.add('fade-in-visible');
+                });
+            }, 100);

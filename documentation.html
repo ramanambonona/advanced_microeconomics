@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation | Advanced Microeconomics Solver</title>
+    <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <style>
+        body {
+            font-family: 'Palatino Linotype', 'Palatino', 'URW Palladio L', serif;
+        }
+        .bg-grenat {
+            background-color: #8B1E3F;
+        }
+        .text-grenat {
+            color: #8B1E3F;
+        }
+        .border-grenat {
+            border-color: #8B1E3F;
+        }
+        .hover\:bg-grenat:hover {
+            background-color: #6E1632;
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .result-fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .download-btn {
+            transition: all 0.3s ease;
+        }
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .math-equation {
+            font-family: 'Times New Roman', serif;
+            padding: 10px;
+            margin: 10px 0;
+            text-align: center;
+            overflow-x: auto;
+        }
+        .equation-block {
+            background: #f8f9fa;
+            border-left: 4px solid #8B1E3F;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 4px 4px 0;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body class="bg-pink-50 min-h-screen">
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 bg-grenat text-white shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="flex items-center space-x-2">
+                    <video autoplay loop muted playsinline preload="auto" poster="assets/images/logo.png" class="w-40 h-10 object-cover rounded-md" aria-label="Logo vidéo AMS">
+                        <source src="assets/images/logo.mp4" type="video/mp4">
+                        Votre navigateur ne supporte pas la balise vidéo.
+                    </video>
+                    <span class="text-xl font-bold hidden md:block">Advanced Microeconomics Solver</span>
+                </div>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="index.html" class="hover:text-pink-200 font-medium">Accueil</a>
+                <a href="static.html" class="hover:text-pink-200 font-medium">Statique</a>
+                <a href="dynamic.html" class="hover:text-pink-200 font-medium">Intertemporel</a>
+                <a href="stochastic.html" class="hover:text-pink-200 font-medium">Stochastique</a>
+                <a href="documentation.html" class="text-pink-200 font-medium underline">Documentation</a>
+            </div>
+            <button id="mobileMenuButton" class="md:hidden">
+                <i data-feather="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div id="mobileMenuOverlay" class="mobile-menu-overlay hidden"></div>
+    <div id="mobileMenu" class="navbar-menu hidden">
+        <div class="p-4">
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-grenat font-bold text-lg">AMS</span>
+                <button id="closeMobileMenu">
+                    <i data-feather="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <a href="index.html" class="block py-2 text-gray-700 hover:text-grenat">Accueil</a>
+                <a href="static.html" class="block py-2 text-gray-700 hover:text-grenat">Statique</a>
+                <a href="dynamic.html" class="block py-2 text-gray-700 hover:text-grenat">Intertemporel</a>
+                <a href="stochastic.html" class="block py-2 text-gray-700 hover:text-grenat">Stochastique</a>
+                <a href="documentation.html" class="block py-2 text-grenat font-medium">Documentation</a>
+            </div>
+        </div>
+    </div>
+
+    <section class="pt-20 pb-16 px-4 bg-gradient-to-r from-grenat to-pink-700 text-white">
+        <div class="container mx-auto text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 fade-in text-gray-700">Documentation</h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-700 fade-in" style="animation-delay: 0.2s">Guide d'utilisation</p>
+            </div>
+    </section>
+
+    <section class="py-12 px-4">
+        <div class="container mx-auto">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="md:col-span-1 fade-in" style="animation-delay: 0.3s">
+                    <div class="bg-white rounded-xl shadow-md p-6 sticky top-24">
+                        <h3 class="text-lg font-bold text-grenat mb-4">Navigation</h3>
+                        <nav class="space-y-2">
+                            <a href="#introduction" class="block py-2 px-3 text-gray-700 hover:bg-grenat hover:text-white rounded transition doc-nav-link">Introduction</a>
+                            <a href="#static-module" class="block py-2 px-3 text-gray-700 hover:bg-grenat hover:text-white rounded transition doc-nav-link">Module Statique</a>
+                            <a href="#dynamic-module" class="block py-2 px-3 text-gray-700 hover:bg-grenat hover:text-white rounded transition doc-nav-link">Module Intertemporel</a>
+                            <a href="#stochastic-module" class="block py-2 px-3 text-gray-700 hover:bg-grenat hover:text-white rounded transition doc-nav-link">Module Stochastique</a>
+                            <a href="#api-reference" class="block py-2 px-3 text-gray-700 hover:bg-grenat hover:text-white rounded transition doc-nav-link">Référence API</a>
+                            <a href="#examples" class="block py-2 px-3 text-gray-700 hover:bg-grenat hover:text-white rounded transition doc-nav-link">Exemples</a>
+                            <a href="#theory" class="block py-2 px-3 text-gray-700 hover:bg-grenat hover:text-white rounded transition doc-nav-link">Théorie économique</a>
+                        </nav>
+                    </div>
+                </div>
+
+                <div class="md:col-span-3">
+                    <div class="bg-white rounded-xl shadow-md p-8">
+                        <section id="introduction" class="doc-section mb-12 fade-in" style="animation-delay: 0.4s">
+                            <h2 class="text-3xl font-bold text-grenat mb-6">Introduction</h2>
+                            <div class="prose max-w-none">
+                                <p class="text-gray-700 mb-4">
+                                    Le <strong>Advanced Microeconomics Solver (AMS)</strong> est un solveur symbolique généralisé 
+                                    pour l'optimisation microéconomique d'ordre n et temps t. Il permet de résoudre des problèmes 
+                                    d'optimisation statique, dynamique et stochastique en utilisant des méthodes symboliques avancées.
+                                </p>
+                                
+                                <h3 class="text-xl font-bold text-grenat mt-6 mb-4">Fonctionnalités principales</h3>
+                                <ul class="list-disc list-inside text-gray-700 space-y-2 mb-6">
+                                    <li><strong>Généralisation d'ordre n</strong> : Support pour n biens et paramètres</li>
+                                    <li><strong>Optimisation temporelle</strong> : Problèmes dynamiques d'ordre t</li>
+                                    <li><strong>Calcul symbolique</strong> : Solutions avec SymPy</li>
+                                    <li><strong>Trois modules</strong> : Statique, Dynamique, Stochastique</li>
+                                    <li><strong>Visualisations</strong> : Graphiques interactifs avec Matplotlib</li>
+                                    <li><strong>Explications détaillées</strong> : Étapes de résolution pédagogiques</li>
+                                </ul>
+
+                                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+                                    <p class="text-blue-800">
+                                        <strong>Note :</strong> AMS est particulièrement adapté pour l'enseignement et la recherche 
+                                        en économie, permettant d'illustrer les concepts théoriques avec des solutions précises.
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section id="static-module" class="doc-section mb-12 fade-in" style="animation-delay: 0.5s">
+                            <h2 class="text-3xl font-bold text-grenat mb-6">Module d'Optimisation Statique</h2>
+                            <div class="prose max-w-none">
+                                <p class="text-gray-700 mb-4">
+                                    Le module statique permet de résoudre des problèmes d'optimisation microéconomique 
+                                    classiques avec n biens.
+                                </p>
+
+                                <h3 class="text-xl font-bold text-grenat mt-6 mb-4">Fonctions d'utilité supportées</h3>
+                                <div class="grid md:grid-cols-2 gap-4 mb-6">
+                                    <div class="bg-pink-50 p-4 rounded-lg">
+                                        <h4 class="font-bold text-grenat mb-2">Cobb-Douglas</h4>
+                                        <p class="math-equation text-sm text-gray-600"> $$ U = A \prod_{i=1}^n x_i^{\alpha_i} $$</p>
+                                    </div>
+                                    <div class="bg-pink-50 p-4 rounded-lg">
+                                        <h4 class="font-bold text-grenat mb-2">Leontief</h4>
+                                        <p class="text-sm text-gray-600">$$ U = \min(\frac{x_1}{a_1}, \dots, \frac{x_n}{a_n})$$</p>
+                                    </div>
+                                    <div class="bg-pink-50 p-4 rounded-lg">
+                                        <h4 class="font-bold text-grenat mb-2">CES</h4>
+                                        <p class="text-sm text-gray-600">$$ U = \left(\sum _{i=1}^n \alpha_i x_i^{\rho}\right)^{\frac{1}{\rho}}$$</p>
+                                    </div>
+                                    <div class="bg-pink-50 p-4 rounded-lg">
+                                        <h4 class="font-bold text-grenat mb-2">CRRA</h4>
+                                        <p class="text-sm text-gray-600"> $$ U = \sum_{i=1} ^n \frac {x_i^{1-\gamma}-1}{1-\gamma}$$</p>
+                                    </div>
+                                </div>
+
+                                <h3 class="text-xl font-bold text-grenat mt-6 mb-4">Problèmes résolus</h3>
+                                <ul class="list-disc list-inside text-gray-700 space-y-2 mb-6">
+                                    <li><strong>Demandes marshalliennes</strong> : Maximisation d'utilité sous contrainte budgétaire</li>
+                                    <li><strong>Demandes hicksiennes</strong> : Minimisation des dépenses pour un niveau d'utilité donné</li>
+                                    <li><strong>Élasticités</strong> : Élasticités-prix, revenu, croisées</li>
+                                    <li><strong>TMS</strong> : Taux Marginal de Substitution</li>
+                                    <li><strong>Équation de Slutsky</strong> : Décomposition effet substitution/effet revenu</li>
+                                </ul>
+
+                                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-6">
+                                    <p class="text-yellow-800">
+                                        <strong>Exemple :</strong> Pour résoudre un problème Cobb-Douglas avec 3 biens, 
+                                        spécifiez n=3 et les paramètres α₁, α₂, α₃. Le solveur générera automatiquement 
+                                        les symboles x₁, x₂, x₃, p₁, p₂, p₃.
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section id="dynamic-module" class="doc-section mb-12 fade-in" style="animation-delay: 0.6s">
+                            <h2 class="text-3xl font-bold text-grenat mb-6">Module d'Optimisation Dynamique</h2>
+                            <div class="prose max-w-none">
+                                <p class="text-gray-700 mb-4">
+                                    Le module dynamique résout des problèmes d'optimisation intertemporelle en temps 
+                                    discret et continu.
+                                </p>
+
+                                <h3 class="text-xl font-bold text-grenat mt-6 mb-4">Exemple de problème</h3>
+                                
+                                <div class="equation-block">
+                                    $$
+                                    \begin{align*}
+                                    \max \quad & \sum_{t=0}^{\infty} \beta^t \log(c_t) \\
+                                    \text{s.c. } \quad & k_{t+1} = A k_t^{\alpha} + (1-\delta)k_t - c_t
+                                    \end{align*}
+                                    $$
+                                </div>
+                                
+                                <p class="text-gray-700 mb-4">
+                                    Le solveur génère les équations d'Euler et trouve la solution symbolique.
+                                </p>
+                            </div>
+                        </section>
+
+                        <section id="stochastic-module" class="doc-section mb-12 fade-in" style="animation-delay: 0.7s">
+                            <h2 class="text-3xl font-bold text-grenat mb-6">Module d'Optimisation Stochastique</h2>
+                            <div class="prose max-w-none">
+                                <p class="text-gray-700 mb-4">
+                                    Le module stochastique traite des problèmes d'optimisation sous incertitude, 
+                                    notamment avec des processus Markoviens.
+                                </p>
+
+                                <h3 class="text-xl font-bold text-grenat mt-6 mb-4">Méthodes implémentées</h3>
+                                <ul class="list-disc list-inside text-gray-700 space-y-2 mb-6">
+                                    <li><strong>Processus Markoviens discrets</strong></li>
+                                    <li><strong>Équations d'Euler stochastiques</strong></li>
+                                    <li><strong>Simulation Monte Carlo</strong></li>
+                                    <li><strong>Distribution stationnaire</strong></li>
+                                    <li><strong>Programmation dynamique stochastique</strong></li>
+                                </ul>
+
+                                <h3 class="text-xl font-bold text-grenat mt-6 mb-4">Configuration de la matrice de transition</h3>
+                                <p class="text-gray-700 mb-4">
+                                    La matrice de transition P doit être stochastique : chaque ligne doit sommer à 1.
+                                </p>
+                                <div class="bg-gray-100 p-4 rounded-lg mb-6">
+                                    <p class="text-sm text-gray-600">Exemple pour 2 états :</p>
+                                    <pre class="text-sm">P = [[0.9, 0.1],  # De l'état 1 vers états 1 et 2
+     [0.2, 0.8]]  # De l'état 2 vers états 1 et 2</pre>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section id="api-reference" class="doc-section mb-12 fade-in" style="animation-delay: 0.8s">
+                            <h2 class="text-3xl font-bold text-grenat mb-6">Référence API</h2>
+                            <div class="prose max-w-none">
+                                <p class="text-gray-700 mb-4">
+                                    L'API REST permet d'intégrer le solveur dans d'autres applications.
+                                </p>
+
+                                <h3 class="text-xl font-bold text-grenat mt-6 mb-4">Endpoints principaux</h3>
+                                
+                                <div class="space-y-4">
+                                    <div class="border border-gray-200 rounded-lg">
+                                        <div class="bg-gray-50 px-4 py-2 border-b">
+                                            <span class="font-mono text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">POST</span>
+                                            <span class="font-mono ml-2">/solve/static</span>
+                                        </div>
+                                        <div class="p-4">
+                                            <p class="text-sm text-gray-600 mb-2">Résout un problème d'optimisation statique</p>
+                                            <pre class="text-xs bg-gray-800 text-green-400 p-2 rounded"><code>{
+  "problem_type": "marshallian",
+  "utility_type": "cobb-douglas",
+  "n_goods": 3,
+  "parameters": {"alpha1": 0.3, "alpha2": 0.3, "alpha3": 0.4},
+  "constraints": ["p1*x1 + p2*x2 + p3*x3 - R"]
+}</code></pre>
+                                        </div>
+                                    </div>
+
+                                    <div class="border border-gray-200 rounded-lg">
+                                        <div class="bg-gray-50 px-4 py-2 border-b">
+                                            <span class="font-mono text-sm bg-green-100 text-green-800 px-2 py-1 rounded">POST</span>
+                                            <span class="font-mono ml-2">/solve/dynamic</span>
+                                        </div>
+                                        <div class="p-4">
+                                            <p class="text-sm text-gray-600 mb-2">Résout un problème d'optimisation dynamique</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="border border-gray-200 rounded-lg">
+                                        <div class="bg-gray-50 px-4 py-2 border-b">
+                                            <span class="font-mono text-sm bg-purple-100 text-purple-800 px-2 py-1 rounded">POST</span>
+                                            <span class="font-mono ml-2">/solve/stochastic</span>
+                                        </div>
+                                        <div class="p-4">
+                                            <p class="text-sm text-gray-600 mb-2">Résout un problème d'optimisation stochastique</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-800 text-white py-8 px-4">
+        <div class="container mx-auto">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="font-bold text-lg mb-4 flex items-center">
+                        <span class="text-grenat mr-2">AMS</span>
+                        Advanced Microeconomics Solver
+                    </h3>
+                    <p class="text-gray-400">Solver symbolique généralisé pour l'optimisation microéconomique.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Modules</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="static.html" class="hover:text-white transition">Statique</a></li>
+                        <li><a href="dynamic.html" class="hover:text-white transition">Intertemporel</a></li>
+                        <li><a href="stochastic.html" class="hover:text-white transition">Stochastique</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Documentation</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="documentation.html" class="hover:text-white transition">Guide d'utilisation</a></li>
+                        <li><a href="theory.html" class="hover:text-white transition">Théorie économique</a></li>
+                        <li><a href="examples.html" class="hover:text-white transition">Exemples</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Développement</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center">
+                            <i data-feather="code" class="w-4 h-4 mr-2"></i>
+                            <a href="https://github.com/ramanambonona/advanced_microeconomics_solver_backend" class="hover:text-white transition">SymPy, FastAPI</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i data-feather="github" class="w-4 h-4 mr-2"></i>
+                            <a href="https://github.com/ramanambonona/advanced_microeconomics_solver_frontend" class="hover:text-white transition">Open Source</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i data-feather="book-open" class="w-4 h-4 mr-2"></i>
+                            <a href="documentation.html" class="hover:text-white transition">Documentation</a>
+                        </li> 
+                    </ul>
+                </div>
+            </div>
+			<div class="flex justify-center space-x-3 mt-6">
+                <a href="https://github.com/ramanambonona/" target="_blank" rel="noopener noreferrer" aria-label="Lien vers GitHub">
+                    <div class="bg-grenat hover:bg-pink-600 transition duration-300 rounded-full p-3 shadow-lg">
+                        <i data-feather="github" class="w-6 h-6 text-white"></i>
+                    </div>
+                </a>
+                <a href="http://linkedin.com/in/ambinintsoa-ramanambonona" target="_blank" rel="noopener noreferrer" aria-label="Lien vers LinkedIn">
+                    <div class="bg-grenat hover:bg-pink-600 transition duration-300 rounded-full p-3 shadow-lg">
+                        <i data-feather="linkedin" class="w-6 h-6 text-white"></i>
+                    </div>
+                </a>
+                <a href="/cdn-cgi/l/email-protection#9cfdf1fef5f2f5f2e8eff3fdb2e9fde8b2f9fdf8aedcfbf1fdf5f0b2fff3f1" aria-label="Envoyer un email">
+                    <div class="bg-grenat hover:bg-pink-600 transition duration-300 rounded-full p-3 shadow-lg">
+                        <i data-feather="mail" class="w-6 h-6 text-white"></i>
+                    </div>
+                </a>
+            </div>
+			<div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+                <p>© 2025 Advanced Microeconomics Solver. Ramanambonona Ambinintsoa, PhD.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="assets/js/documentation.js"></script>
+	    <script>
+        // Configuration MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                packages: {'[+]': ['ams', 'color']}
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+                renderActions: {
+                    addMenu: [0, '', '']
+                }
+            },
+            startup: {
+                pageReady: () => {
+                    return MathJax.startup.defaultPageReady().then(() => {
+                        console.log('MathJax initialized successfully');
+                    });
+                }
+            }
+        };
+
+        // Script pour gérer l'initialisation des éléments
+        document.addEventListener('DOMContentLoaded', function() {
+            // Trigger fade-in animations
+            setTimeout(() => {
+                document.querySelectorAll('.fade-in').forEach(el => {
+                    el.classList.add('fade-in-visible');
+                });
+            }, 100);
+
+            // Update feather icons
+            if (window.fea

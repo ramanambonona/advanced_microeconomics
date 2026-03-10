@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimisation Dynamique | Advanced Microeconomics Solver</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <style>
+        body {
+            font-family: 'Palatino Linotype', 'Palatino', 'URW Palladio L', serif;
+        }
+        .bg-grenat {
+            background-color: #8B1E3F;
+        }
+        .text-grenat {
+            color: #8B1E3F;
+        }
+        .border-grenat {
+            border-color: #8B1E3F;
+        }
+        .hover\:bg-grenat:hover {
+            background-color: #6E1632;
+        }
+        .math-equation {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .result-fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .download-btn {
+            transition: all 0.3s ease;
+        }
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .math-equation {
+            font-family: 'Times New Roman', serif;
+            padding: 10px;
+            margin: 10px 0;
+            text-align: center;
+            overflow-x: auto;
+        }
+        .equation-block {
+            background: #f8f9fa;
+            border-left: 4px solid #8B1E3F;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 4px 4px 0;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body class="bg-pink-50 min-h-screen">
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 bg-grenat text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                    <video autoplay loop muted playsinline preload="auto" poster="assets/images/logo.png" class="w-40 h-10 object-cover rounded-md" aria-label="Logo vidéo AMS">
+                        <source src="assets/images/logo.mp4" type="video/mp4">
+                        Votre navigateur ne supporte pas la balise vidéo.
+                    </video>
+                    <span class="text-xl font-bold hidden md:block">Advanced Microeconomics Solver</span>
+                </div>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="index.html" class="hover:text-pink-200 font-medium">Accueil</a>
+                <a href="static.html" class="hover:text-pink-200 font-medium">Statique</a>
+                <a href="dynamic.html" class="text-pink-200 font-medium underline">Intertemporel</a>
+                <a href="stochastic.html" class="hover:text-pink-200 font-medium">Stochastique</a>
+                <a href="documentation.html" class="hover:text-pink-200 font-medium">Documentation</a>
+            </div>
+            <button id="mobileMenuButton" class="md:hidden">
+                <i data-feather="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenuOverlay" class="mobile-menu-overlay hidden"></div>
+    <div id="mobileMenu" class="navbar-menu hidden">
+        <div class="p-4">
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-grenat font-bold text-lg">AMS</span>
+                <button id="closeMobileMenu">
+                    <i data-feather="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <a href="index.html" class="block py-2 text-gray-700 hover:text-grenat">Accueil</a>
+                <a href="static.html" class="block py-2 text-gray-700 hover:text-grenat">Statique</a>
+                <a href="dynamic.html" class="block py-2 text-grenat font-medium">Intertemporel</a>
+                <a href="stochastic.html" class="block py-2 text-gray-700 hover:text-grenat">Stochastique</a>
+                <a href="documentation.html" class="block py-2 text-gray-700 hover:text-grenat">Documentation</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="pt-20 pb-12 px-4 bg-gradient-to-r from-grenat to-pink-700 text-white">
+        <div class="container mx-auto text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 text-gray-600">Optimisation Dynamique</h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-600">Résolution de problèmes d'optimisation intertemporelle d'ordre T</p>
+            <div class="flex justify-center space-x-4">
+                <span class="bg-white text-grenat px-3 py-1 rounded-full text-sm font-medium">Horizon fini/infini</span>
+                <span class="bg-white text-grenat px-3 py-1 rounded-full text-sm font-medium">Équations d'Euler</span>
+                <span class="bg-white text-grenat px-3 py-1 rounded-full text-sm font-medium">État stationnaire</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Input Section -->
+    <section class="py-12 px-4">
+        <div class="container mx-auto">
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Input Form -->
+                <div class="bg-white rounded-xl shadow-md p-6 fade-in">
+                    <h2 class="text-2xl font-bold mb-6 text-grenat flex items-center">
+                        <i data-feather="settings" class="mr-2"></i>
+                        Configuration du problème dynamique
+                    </h2>
+                    
+                    <form id="dynamicProblemForm" class="space-y-6">
+                        <!-- Horizon Type -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Type d'horizon</label>
+                            <select id="horizonType" name="horizonType" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-grenat focus:border-transparent">
+                                <option value="finite">Horizon fini</option>
+                                <option value="infinite">Horizon infini</option>
+                            </select>
+                        </div>
+
+                        <!-- Time Periods -->
+                        <div id="timePeriodsSection">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Périodes temporelles (T)</label>
+                            <input type="number" id="T" name="T" min="2" max="20" value="3" 
+                                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-grenat focus:border-transparent">
+                            <p class="text-xs text-gray-500 mt-1">Entre 2 et 20 périodes pour l'horizon fini</p>
+                        </div>
+
+                        <!-- Utility Function -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Fonction d'utilité U(c)</label>
+                            <input type="text" id="utilityExpr" name="utilityExpr" 
+                                   placeholder="Ex: log(c), c**(1-gamma)/(1-gamma)" 
+                                   value="log(c)"
+                                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-grenat focus:border-transparent">
+                            <p class="text-xs text-gray-500 mt-1">Utilisez 'c' pour la consommation. Expressions supportées: log, exp, pow, sqrt</p>
+                        </div>
+
+                        <!-- Constraint -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Contrainte de ressources g(c, k, k_next)</label>
+                            <input type="text" id="constraintExpr" name="constraintExpr" 
+                                   placeholder="Ex: k_next - (1-delta)*k - A*k**alpha + c" 
+                                   value="k_next - (1-delta)*k - A*k**alpha + c"
+                                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-grenat focus:border-transparent">
+                            <p class="text-xs text-gray-500 mt-1">Utilisez k (capital période t), k_next (capital période t+1), c (consommation)</p>
+                        </div>
+
+                        <!-- Discount Factor -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Facteur d'escompte (β)</label>
+                            <input type="text" id="beta" name="beta" value="0.96" 
+                                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-grenat focus:border-transparent"
+                                   placeholder="0.96 ou beta">
+                            <p class="text-xs text-gray-500 mt-1">Entre 0 et 1. Typiquement 0.95-0.99</p>
+                        </div>
+
+                        <!-- Parameters -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Paramètres</label>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs text-gray-600 mb-1">Alpha (α)</label>
+                                    <input type="text" name="alpha" value="0.33" 
+                                           class="w-full p-2 border border-gray-300 rounded focus:ring-1 focus:ring-grenat"
+                                           placeholder="0.33 ou alpha">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-gray-600 mb-1">Delta (δ)</label>
+                                    <input type="text" name="delta" value="0.08" 
+                                           class="w-full p-2 border border-gray-300 rounded focus:ring-1 focus:ring-grenat"
+                                           placeholder="0.08 ou delta">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-gray-600 mb-1">A (productivité)</label>
+                                    <input type="text" name="A" value="1.0" 
+                                           class="w-full p-2 border border-gray-300 rounded focus:ring-1 focus:ring-grenat"
+                                           placeholder="1.0 ou A">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-gray-600 mb-1">Gamma (γ)</label>
+                                    <input type="text" name="gamma" value="2.0" 
+                                           class="w-full p-2 border border-gray-300 rounded focus:ring-1 focus:ring-grenat"
+                                           placeholder="2.0 ou gamma">
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2">Les paramètres peuvent être numériques ou symboliques</p>
+                        </div>
+
+                        <!-- Advanced Options -->
+                        <div class="border-t pt-4">
+                            <details class="group">
+                                <summary class="cursor-pointer text-sm font-medium text-gray-700 hover:text-grenat flex items-center">
+                                    <i data-feather="chevron-down" class="w-4 h-4 mr-1 group-open:rotate-180 transition-transform"></i>
+                                    Options de résolution
+                                </summary>
+                                <div class="mt-3 space-y-3">
+                                    <div>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" name="compute_steady_state" checked class="mr-2 rounded text-grenat focus:ring-grenat">
+                                            <span class="text-sm text-gray-700">Calculer l'état stationnaire</span>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" name="show_policy_functions" checked class="mr-2 rounded text-grenat focus:ring-grenat">
+                                            <span class="text-sm text-gray-700">Afficher les fonctions de politique</span>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" name="show_time_path" checked class="mr-2 rounded text-grenat focus:ring-grenat">
+                                            <span class="text-sm text-gray-700">Afficher le chemin temporel</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </details>
+                        </div>
+
+                        <!-- Solve Button -->
+                        <button type="submit" class="w-full bg-grenat text-white py-3 px-6 rounded-lg font-bold hover:bg-grenat-800 transition transform hover:-translate-y-1 shadow-lg flex items-center justify-center">
+                            <i data-feather="cpu" class="mr-2"></i>
+                            Résoudre le problème dynamique
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Results Display -->
+                <div class="bg-white rounded-xl shadow-md p-6 fade-in" style="animation-delay: 0.1s">
+                    <h2 class="text-2xl font-bold mb-6 text-grenat flex items-center">
+                        <i data-feather="bar-chart" class="mr-2"></i>
+                        Résultats
+                    </h2>
+                    <div id="results" class="space-y-4">
+                        <div class="text-center py-12">
+                            <i data-feather="clock" class="w-12 h-12 text-gray-400 mx-auto mb-4"></i>
+                            <p class="text-gray-500 text-lg">Les résultats apparaîtront ici après résolution</p>
+                            <p class="text-gray-400 text-sm mt-2">Configurez le problème et cliquez sur "Résoudre"</p>
+                        </div>
+                    </div>
+
+                    <!-- Loading Spinner -->
+                    <div id="loading" class="hidden text-center py-8">
+                        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-grenat mb-4"></div>
+                        <p class="text-gray-600 text-lg">Résolution en cours...</p>
+                        <p class="text-gray-500 text-sm mt-2">Programmation dynamique avec SymPy</p>
+                    </div>
+
+                    <!-- Solution Steps -->
+                    <div id="solutionSteps" class="hidden mt-8 space-y-4">
+                        <h3 class="text-lg font-bold text-grenat mb-4 flex items-center">
+                            <i data-feather="list" class="mr-2"></i>
+                            Étapes de résolution
+                        </h3>
+                        <div id="stepsList" class="space-y-3"></div>
+                    </div>
+
+                    <!-- Euler Equations -->
+                    <div id="eulerEquations" class="hidden mt-8">
+                        <h3 class="text-lg font-bold text-grenat mb-4 flex items-center">
+                            <i data-feather="git-merge" class="mr-2"></i>
+                            Équations d'Euler
+                        </h3>
+                        <div id="eulerList" class="space-y-2 mt-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Theory Section -->
+    <section class="py-12 px-4 bg-gray-50">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Théorie de l'optimisation dynamique</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="fade-in">
+                    <h3 class="text-xl font-bold mb-4 text-grenat flex items-center">
+                        <i data-feather="target" class="mr-2"></i>
+                        Problème d'optimisation dynamique
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                        L'optimisation dynamique consiste à maximiser une fonction objectif intertemporelle :
+                    </p>
+                    <div class="equation-block">
+                        <div class="math-equation">$$\max_{\{c_t, k_{t+1}\}_{t=0}^T} \sum_{t=0}^T \beta^t U(c_t)$$</div>
+                    </div>
+                    <p class="text-gray-600 mb-4 mt-4">
+                        Sous contrainte de ressources à chaque période :
+                    </p>
+                    <div class="equation-block">
+                        <div class="math-equation">$$g(c_t, k_t, k_{t+1}) = 0$$</div>
+                    </div>
+                    <p class="text-gray-600 mt-4">
+                        Pour l'horizon infini, la somme va de $t=0$ à $\infty$.
+                    </p>
+                </div>
+                
+                <div class="fade-in" style="animation-delay: 0.1s">
+                    <h3 class="text-xl font-bold mb-4 text-grenat flex items-center">
+                        <i data-feather="git-merge" class="mr-2"></i>
+                        Équation d'Euler
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                        La condition d'optimalité intertemporelle est donnée par l'équation d'Euler :
+                    </p>
+                    <div class="equation-block">
+                        <div class="math-equation">$$U'(c_t) = \beta U'(c_{t+1}) F'(k_{t+1})$$</div>
+                    </div>
+                    <p class="text-gray-600 mt-4">
+                        Cette équation relie la consommation entre deux périodes adjacentes et le produit marginal du capital.
+                    </p>
+                    
+                    <h4 class="font-bold mt-6 mb-3 text-grenat">Équation de Bellman :</h4>
+                    <div class="equation-block">
+                        <div class="math-equation">$$V(k_t) = \max_{c_t} \left\{ U(c_t) + \beta V(k_{t+1}) \right\}$$</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 fade-in" style="animation-delay: 0.2s">
+                <h3 class="text-xl font-bold mb-6 text-grenat text-center">Méthodes de résolution</h3>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="text-center p-4 border border-grenat rounded-lg hover:shadow-lg transition">
+                        <div class="bg-grenat text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-feather="layers"></i>
+                        </div>
+                        <h4 class="font-bold mb-2">Programmation dynamique</h4>
+                        <p class="text-sm text-gray-600">Équation de Bellman et principe d'optimalité</p>
+                        <div class="equation-block mt-2">
+                            <div class="math-equation text-xs">$$V(k) = \max_c \{U(c) + \beta V(k')\}$$</div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center p-4 border border-grenat rounded-lg hover:shadow-lg transition">
+                        <div class="bg-grenat text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-feather="git-branch"></i>
+                        </div>
+                        <h4 class="font-bold mb-2">Contrôle optimal</h4>
+                        <p class="text-sm text-gray-600">Principe du maximum de Pontryagin</p>
+                        <div class="equation-block mt-2">
+                            <div class="math-equation text-xs">$$\mathcal{H} = U(c) + \lambda g(c,k,k')$$</div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center p-4 border border-grenat rounded-lg hover:shadow-lg transition">
+                        <div class="bg-grenat text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-feather="infinity"></i>
+                        </div>
+                        <h4 class="font-bold mb-2">État stationnaire</h4>
+                        <p class="text-sm text-gray-600">Analyse de long terme pour horizon infini</p>
+                        <div class="equation-block mt-2">
+                            <div class="math-equation text-xs">$$k_{t+1} = k_t = k^*$$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example Problems -->
+            <div class="mt-12 fade-in" style="animation-delay: 0.3s">
+                <h3 class="text-xl font-bold mb-6 text-grenat text-center">Exemples Classiques</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-lg border border-gray-200">
+                        <h4 class="font-bold text-grenat mb-3">Modèle de Croissance de Ramsey</h4>
+                        <div class="equation-block">
+                            <div class="math-equation text-sm">$$\max \sum_{t=0}^\infty \beta^t \frac{c_t^{1-\gamma}}{1-\gamma}$$</div>
+                            <div class="math-equation text-sm">$$\text{s.c. } k_{t+1} = A k_t^\alpha + (1-\delta)k_t - c_t$$</div>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-2">Croissance optimale avec utilité CRRA</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg border border-gray-200">
+                        <h4 class="font-bold text-grenat mb-3">Modèle de Consommation</h4>
+                        <div class="equation-block">
+                            <div class="math-equation text-sm">$$\max \sum_{t=0}^T \beta^t \log(c_t)$$</div>
+                            <div class="math-equation text-sm">$$\text{s.c. } a_{t+1} = (1+r)a_t + y_t - c_t$$</div>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-2">Choix intertemporel de consommation avec revenu</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 px-4">
+        <div class="container mx-auto">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="font-bold text-lg mb-4 flex items-center">
+                        <span class="text-grenat mr-2">AMS</span>
+                        Advanced Microeconomics Solver
+                    </h3>
+                    <p class="text-gray-400">Solver symbolique généralisé pour l'optimisation microéconomique.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Modules</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="static.html" class="hover:text-white transition">Statique</a></li>
+                        <li><a href="dynamic.html" class="hover:text-white transition">Intertemporel</a></li>
+                        <li><a href="stochastic.html" class="hover:text-white transition">Stochastique</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Documentation</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="documentation.html" class="hover:text-white transition">Guide d'utilisation</a></li>
+                        <li><a href="documentation.html#theory" class="hover:text-white transition">Théorie économique</a></li>
+                        <li><a href="documentation.html#examples" class="hover:text-white transition">Exemples</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Développement</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center">
+                            <i data-feather="code" class="w-4 h-4 mr-2"></i>
+                            <a href="https://github.com/ramanambonona/advanced_microeconomics_solver_backend" class="hover:text-white transition">SymPy, FastAPI</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i data-feather="github" class="w-4 h-4 mr-2"></i>
+                            <a href="https://github.com/ramanambonona/advanced_microeconomics_solver_frontend" class="hover:text-white transition">Open Source</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i data-feather="book-open" class="w-4 h-4 mr-2"></i>
+                            <a href="documentation.html" class="hover:text-white transition">Documentation</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="flex justify-center space-x-3 mt-6">
+                <a href="https://github.com/ramanambonona/" target="_blank" rel="noopener noreferrer" aria-label="Lien vers GitHub">
+                    <div class="bg-grenat hover:bg-pink-600 transition duration-300 rounded-full p-3 shadow-lg">
+                        <i data-feather="github" class="w-6 h-6 text-white"></i>
+                    </div>
+                </a>
+                <a href="http://linkedin.com/in/ambinintsoa-ramanambonona" target="_blank" rel="noopener noreferrer" aria-label="Lien vers LinkedIn">
+                    <div class="bg-grenat hover:bg-pink-600 transition duration-300 rounded-full p-3 shadow-lg">
+                        <i data-feather="linkedin" class="w-6 h-6 text-white"></i>
+                    </div>
+                </a>
+                <a href="/cdn-cgi/l/email-protection#2d4c404f44434443595e424c03584c5903484c491f6d4a404c4441034e4240" aria-label="Envoyer un email">
+                    <div class="bg-grenat hover:bg-pink-600 transition duration-300 rounded-full p-3 shadow-lg">
+                        <i data-feather="mail" class="w-6 h-6 text-white"></i>
+                    </div>
+                </a>
+            </div>
+			<div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+                <p>© 2025 Advanced Microeconomics Solver. Ramanambonona Ambinintsoa, PhD.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="assets/js/api.js"></script>
+    <script src="assets/js/dynamic.js"></script>
+    <script>
+        // Configuration MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                packages: {'[+]': ['ams', 'color']}
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+                renderActions: {
+                    addMenu: [0, '', '']
+                }
+            }
+        };
+
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                document.querySelectorAll('.fade-in').forEach(el => {
+                    el.classList.add('fade-in-visible');
+     

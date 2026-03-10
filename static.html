@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimisation Statique | Advanced Microeconomics Solver</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <style>
+        body {
+            font-family: 'Palatino Linotype', 'Palatino', 'URW Palladio L', serif;
+        }
+        .bg-grenat {
+            background-color: #8B1E3F;
+        }
+        .text-grenat {
+            color: #8B1E3F;
+        }
+        .border-grenat {
+            border-color: #8B1E3F;
+        }
+        .hover\:bg-grenat:hover {
+            background-color: #6E1632;
+        }
+        .utility-preview {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .result-fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .download-btn {
+            transition: all 0.3s ease;
+        }
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .math-equation {
+            font-family: 'Times New Roman', serif;
+            padding: 10px;
+            margin: 10px 0;
+            text-align: center;
+            overflow-x: auto;
+        }
+        .equation-block {
+            background: #f8f9fa;
+            border-left: 4px solid #8B1E3F;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 4px 4px 0;
+            overflow-x: auto;
+        }
+        .transition-cell {
+            width: 60px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="bg-pink-50 min-h-screen">
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 bg-grenat text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                    <video autoplay loop muted playsinline preload="auto" poster="assets/images/logo.png" class="w-40 h-10 object-cover rounded-md" aria-label="Logo vidéo AMS">
+						<source src="assets/images/logo.webm" type="video/webm">
+                    </video>
+                    <span class="text-xl font-bold hidden md:block">Advanced Microeconomics Solver</span>
+                </div>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="index.html" class="hover:text-pink-200 font-medium">Accueil</a>
+                <a href="static.html" class="text-pink-200 font-medium underline">Statique</a>
+                <a href="dynamic.html" class="hover:text-pink-200 font-medium">Intertemporel</a>
+                <a href="stochastic.html" class="hover:text-pink-200 font-medium">Stochastique</a>
+                <a href="documentation.html" class="hover:text-pink-200 font-medium">Documentation</a>
+            </div>
+            <button id="mobileMenuButton" class="md:hidden">
+                <i data-feather="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenuOverlay" class="mobile-menu-overlay hidden"></div>
+    <div id="mobileMenu" class="navbar-menu hidden">
+        <div class="p-4">
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-grenat font-bold text-lg">AMS</span>
+                <button id="closeMobileMenu">
+                    <i data-feather="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <a href="index.html" class="block py-2 text-gray-700 hover:text-grenat">Accueil</a>
+                <a href="static.html" class="block py-2 text-grenat font-medium">Statique</a>
+                <a href="dynamic.html" class="block py-2 text-gray-700 hover:text-grenat">Intertemporel</a>
+                <a href="stochastic.html" class="block py-2 text-gray-700 hover:text-grenat">Stochastique</a>
+                <a href="documentation.html" class="block py-2 text-gray-700 hover:text-grenat">Documentation</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="pt-20 pb-12 px-4 bg-gradient-to-r from-grenat to-pink-700 text-white">
+        <div class="container mx-auto text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 text-gray-600">Optimisation Statique</h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-600">Résolution de problèmes d'optimisation microéconomique statique</p>
+            <div class="flex justify-center space-x-4">
+                <span class="bg-white text-grenat px-3 py-1 rounded-full text-sm font-medium">n variables</span>
+                <span class="bg-white text-grenat px-3 py-1 rounded-full text-sm font-medium">Symbolique</span>
+                <span class="bg-white text-grenat px-3 py-1 rounded-full text-sm font-medium">LaTeX Export</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Input Section -->
+    <section class="py-12 px-4">
+        <div class="container mx-auto">
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Input Form -->
+                <div class="bg-white rounded-xl shadow-md p-6 fade-in">
+                    <h2 class="text-2xl font-bold mb-6 text-grenat flex items-center">
+                        <i data-feather="settings" class="mr-2"></i>
+                        Configuration du problème statique
+                    </h2>
+                    
+                    <form id="staticProblemForm" class="space-y-6">
+                        <!-- Problem Type -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Type de problème</label>
+                            <select id="problemType" name="problemType" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-grenat focus:border-transparent">
+                                <option value="marshallian">Demande Marshallienne (Maximisation d'utilité)</option>
+                                <option value="hicksian">Demande Hicksienne (Minimisation des dépenses)</option>
+                            </select>
+                        </div>
+
+                        <!-- Number of Goods -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nombre de biens (n)</label>
+                            <input type="number" id="nGoods" name="nGoods" min="1" max="10" value="2" 
+                                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-grenat focus:border-transparent">
+                            <p class="text-xs text-gray-500 mt-1">Entre 1 et 10 biens</p>
+                        </div>
+
+                        <!-- Utility Function Type -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Fonction d'utilité</label>
+                            <select id="utilityType" name="utilityType" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-grenat focus:border-transparent">
+                                <option value="cobb-douglas">Cobb-Douglas</option>
+                                <option value="leontief">Leontief</option>
+                                <option value="ces">CES (Elasticité Constante)</option>
+                                <option value="crra">CRRA (Aversion Relative Constante)</option>
+                                <option value="cara">CARA (Aversion Absolue Constante)</option>
+                                <option value="custom">Personnalisée</option>
+                            </select>
+                        </div>
+
+                        <!-- Custom Utility Input -->
+                        <div id="customUtilitySection" class="hidden">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Fonction d'utilité personnalisée</label>
+                            <input type="text" id="customUtility" name="customUtility" 
+                                   placeholder="Ex: x1**0.3 * x2**0.7, log(x1) + log(x2)" 
+                                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-grenat focus:border-transparent">
+                            <p class="text-xs text-gray-500 mt-1">Utilisez x1, x2, ... pour les biens. Exemples: x1**a * x2**b, log(x1) + log(x2), (x1**r + x2**r)**(1/r)</p>
+                        </div>
+
+                        <!-- Parameters Section -->
+                        <div id="parametersSection">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Paramètres de la fonction d'utilité</label>
+                            <div id="parametersContainer" class="space-y-3">
+                                <!-- Parameters will be generated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Utility Preview -->
+                        <div id="utilityPreview" class="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg border border-blue-200 hidden">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Aperçu de la fonction d'utilité</label>
+                            <div id="previewContent" class="utility-preview text-center text-lg math-equation"></div>
+                        </div>
+
+                        <!-- Additional Parameters -->
+                        <div id="additionalParamsSection" class="border-t pt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Paramètres supplémentaires</label>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs text-gray-600 mb-1" id="budgetLabel">Revenu (R)</label>
+                                    <input type="text" id="R" name="R" value="100" 
+                                           class="w-full p-2 border border-gray-300 rounded focus:ring-1 focus:ring-grenat"
+                                           placeholder="100 ou R">
+                                </div>
+                                <div id="utilityLevelSection" class="hidden">
+                                    <label class="block text-xs text-gray-600 mb-1">Niveau d'utilité (Ū)</label>
+                                    <input type="text" id="U_bar" name="U_bar" value="10" 
+                                           class="w-full p-2 border border-gray-300 rounded focus:ring-1 focus:ring-grenat"
+                                           placeholder="10 ou Ū">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Price Configuration -->
+                        <div id="priceSection">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Prix des biens</label>
+                            <div id="priceContainer" class="grid grid-cols-2 gap-4">
+                                <!-- Prices will be generated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Advanced Options -->
+                        <div class="border-t pt-4">
+                            <details class="group">
+                                <summary class="cursor-pointer text-sm font-medium text-gray-700 hover:text-grenat flex items-center">
+                                    <i data-feather="chevron-down" class="w-4 h-4 mr-1 group-open:rotate-180 transition-transform"></i>
+                                    Options avancées
+                                </summary>
+                                <div class="mt-3 space-y-3">
+                                    <div>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" id="computeElasticities" name="computeElasticities" checked class="mr-2 rounded text-grenat focus:ring-grenat">
+                                            <span class="text-sm text-gray-700">Calculer les élasticités</span>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" id="computeTMS" name="computeTMS" checked class="mr-2 rounded text-grenat focus:ring-grenat">
+                                            <span class="text-sm text-gray-700">Calculer le TMS (Taux Marginal de Substitution)</span>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" id="showSteps" name="showSteps" checked class="mr-2 rounded text-grenat focus:ring-grenat">
+                                            <span class="text-sm text-gray-700">Afficher les étapes de résolution</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </details>
+                        </div>
+
+                        <!-- Solve Button -->
+                        <button type="submit" class="w-full bg-grenat text-white py-3 px-6 rounded-lg font-bold hover:bg-grenat-800 transition transform hover:-translate-y-1 shadow-lg flex items-center justify-center">
+                            <i data-feather="cpu" class="mr-2"></i>
+                            Résoudre le problème statique
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Results Display -->
+                <div class="bg-white rounded-xl shadow-md p-6 fade-in" style="animation-delay: 0.1s">
+                    <h2 class="text-2xl font-bold mb-6 text-grenat flex items-center">
+                        <i data-feather="bar-chart" class="mr-2"></i>
+                        Résultats
+                    </h2>
+                    <div id="results" class="space-y-4">
+                        <div class="text-center py-12">
+                            <i data-feather="clipboard" class="w-12 h-12 text-gray-400 mx-auto mb-4"></i>
+                            <p class="text-gray-500 text-lg">Les résultats apparaîtront ici après résolution</p>
+                            <p class="text-gray-400 text-sm mt-2">Configurez le problème et cliquez sur "Résoudre"</p>
+                        </div>
+                    </div>
+
+                    <!-- Loading Spinner -->
+                    <div id="loading" class="hidden text-center py-8">
+                        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-grenat mb-4"></div>
+                        <p class="text-gray-600 text-lg">Résolution en cours...</p>
+                        <p class="text-gray-500 text-sm mt-2">Calcul symbolique avec SymPy</p>
+                    </div>
+
+                    <!-- Solution Steps -->
+                    <div id="solutionSteps" class="hidden mt-8 space-y-4">
+                        <h3 class="text-lg font-bold text-grenat mb-4 flex items-center">
+                            <i data-feather="list" class="mr-2"></i>
+                            Étapes de résolution
+                        </h3>
+                        <div id="stepsList" class="space-y-3"></div>
+                    </div>
+
+                    <!-- Marshallian Results -->
+                    <div id="marshallianResults" class="hidden mt-8 space-y-4">
+                        <h3 class="text-lg font-bold text-grenat mb-4 flex items-center">
+                            <i data-feather="shopping-cart" class="mr-2"></i>
+                            Demandes Marshalliennes
+                        </h3>
+                        <div id="demandEquations" class="space-y-2"></div>
+                        
+                        <div id="elasticitiesSection" class="mt-6">
+                            <h4 class="font-bold text-grenat mb-3 flex items-center">
+                                <i data-feather="trending-up" class="mr-2"></i>
+                                Élasticités
+                            </h4>
+                            <div id="elasticitiesContent" class="space-y-2"></div>
+                        </div>
+                    </div>
+
+                    <!-- Hicksian Results -->
+                    <div id="hicksianResults" class="hidden mt-8 space-y-4">
+                        <h3 class="text-lg font-bold text-grenat mb-4 flex items-center">
+                            <i data-feather="dollar-sign" class="mr-2"></i>
+                            Demandes Hicksiennes
+                        </h3>
+                        <div id="hicksianEquations" class="space-y-2"></div>
+                        
+                        <div id="expenditureSection" class="mt-6">
+                            <h4 class="font-bold text-grenat mb-3 flex items-center">
+                                <i data-feather="credit-card" class="mr-2"></i>
+                                Fonction de Dépense
+                            </h4>
+                            <div id="expenditureContent"></div>
+                        </div>
+                    </div>
+
+                    <!-- TMS Section -->
+                    <div id="tmsSection" class="hidden mt-8">
+                        <h3 class="text-lg font-bold text-grenat mb-4 flex items-center">
+                            <i data-feather="refresh-cw" class="mr-2"></i>
+                            Taux Marginal de Substitution (TMS)
+                        </h3>
+                        <div id="tmsContent" class="mt-2"></div>
+                    </div>
+
+                    <!-- Slutsky Decomposition -->
+                    <div id="slutskySection" class="hidden mt-8">
+                        <h3 class="text-lg font-bold text-grenat mb-4 flex items-center">
+                            <i data-feather="git-branch" class="mr-2"></i>
+                            Décomposition de Slutsky
+                        </h3>
+                        <div id="slutskyContent" class="mt-2 space-y-2"></div>
+                    </div>
+
+                    <!-- Graphical Results -->
+                    <div id="graphicalResults" class="hidden mt-8">
+                        <h3 class="text-lg font-bold text-grenat mb-4 flex items-center">
+                            <i data-feather="image" class="mr-2"></i>
+                            Représentation Graphique
+                        </h3>
+                        <div id="graphContainer" class="mt-4 bg-gray-50 rounded-lg p-4">
+                            <!-- Graph content will be generated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Theory Section -->
+    <section class="py-12 px-4 bg-gray-50">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Théorie de l'optimisation statique</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="fade-in">
+                    <h3 class="text-xl font-bold mb-4 text-grenat flex items-center">
+                        <i data-feather="target" class="mr-2"></i>
+                        Demandes Marshalliennes
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                        Les demandes marshalliennes résolvent le problème de maximisation de l'utilité sous contrainte budgétaire :
+                    </p>
+                    <div class="equation-block">
+                        <div class="math-equation">$$\max_{x_1, x_2, \ldots, x_n} U(x_1, x_2, \ldots, x_n)$$</div>
+                        <div class="math-equation">$$\text{sous } \sum_{i=1}^n p_i x_i = R$$</div>
+                    </div>
+                    <p class="text-gray-600 mt-4">
+                        La solution donne les fonctions de demande en fonction des prix et du revenu.
+                    </p>
+                    
+                    <h4 class="font-bold mt-6 mb-3 text-grenat">Propriétés :</h4>
+                    <ul class="list-disc list-inside text-gray-600 space-y-2 text-sm">
+                        <li>Homogénéité de degré 0 dans les prix et le revenu</li>
+                        <li>Équation de Slutsky : effet substitution + effet revenu</li>
+                        <li>Symétrie des effets de substitution croisés</li>
+                        <li>Agrégation de Engel et Cournot</li>
+                    </ul>
+                </div>
+                
+                <div class="fade-in" style="animation-delay: 0.1s">
+                    <h3 class="text-xl font-bold mb-4 text-grenat flex items-center">
+                        <i data-feather="dollar-sign" class="mr-2"></i>
+                        Demandes Hicksiennes
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                        Les demandes hicksiennes résolvent le problème de minimisation des dépenses pour atteindre un niveau d'utilité donné :
+                    </p>
+                    <div class="equation-block">
+                        <div class="math-equation">$$\min_{x_1, x_2, \ldots, x_n} \sum_{i=1}^n p_i x_i$$</div>
+                        <div class="math-equation">$$\text{sous } U(x_1, x_2, \ldots, x_n) = \bar{U}$$</div>
+                    </div>
+                    <p class="text-gray-600 mt-4">
+                        La solution donne les fonctions de demande compensée et la fonction de dépense.
+                    </p>
+                    
+                    <h4 class="font-bold mt-6 mb-3 text-grenat">Propriétés :</h4>
+                    <ul class="list-disc list-inside text-gray-600 space-y-2 text-sm">
+                        <li>Homogénéité de degré 0 en prix</li>
+                        <li>Lemme de Shepard : dérivées de la fonction de dépense</li>
+                        <li>Concavité de la fonction de dépense</li>
+                        <li>Symétrie et semi-définie négativité de la matrice de substitution</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-12 fade-in" style="animation-delay: 0.2s">
+                <h3 class="text-xl font-bold mb-6 text-grenat text-center">Fonctions d'utilité supportées</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="text-center p-4 border border-grenat rounded-lg hover:shadow-lg transition">
+                        <div class="bg-grenat text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-feather="box"></i>
+                        </div>
+                        <h4 class="font-bold mb-2">Cobb-Douglas</h4>
+                        <div class="math-equation text-sm">$$U = k x_1^{\alpha_1}...x_n^{\alpha_n}$$</div>
+                        <p class="text-xs text-gray-500 mt-2">Substitus parfaits</p>
+                    </div>
+                    
+                    <div class="text-center p-4 border border-grenat rounded-lg hover:shadow-lg transition">
+                        <div class="bg-grenat text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-feather="minimize"></i>
+                        </div>
+                        <h4 class="font-bold mb-2">Leontief</h4>
+                        <div class="math-equation text-sm">$$U = \min\left(\frac{x_1}{a_1},...,\frac{x_n}{a_n}\right)$$</div>
+                        <p class="text-xs text-gray-500 mt-2">Compléments parfaits</p>
+                    </div>
+                    
+                    <div class="text-center p-4 border border-grenat rounded-lg hover:shadow-lg transition">
+                        <div class="bg-grenat text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-feather="activity"></i>
+                        </div>
+                        <h4 class="font-bold mb-2">CES</h4>
+                        <div class="math-equation text-sm">$$U = \left(\sum \alpha_i x_i^\rho\right)^{\frac{1}{\rho}}$$</div>
+                        <p class="text-xs text-gray-500 mt-2">Élasticité constante</p>
+                    </div>
+
+                    <div class="text-center p-4 border border-grenat rounded-lg hover:shadow-lg transition">
+                        <div class="bg-grenat text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-feather="trending-up"></i>
+                        </div>
+                        <h4 class="font-bold mb-2">CRRA</h4>
+                        <div class="math-equation text-sm">$$U = \sum_{i=1}^n \frac{x_i^{1-\gamma}-1}{1-\gamma}$$</div>
+                        <p class="text-xs text-gray-500 mt-2">Aversion relative constante</p>
+                    </div>
+
+                    <div class="text-center p-4 border border-grenat rounded-lg hover:shadow-lg transition">
+                        <div class="bg-grenat text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-feather="zap"></i>
+                        </div>
+                        <h4 class="font-bold mb-2">CARA</h4>
+                        <div class="math-equation text-sm">$$U = -\sum_{i=1}^n e^{-\alpha x_i}$$</div>
+                        <p class="text-xs text-gray-500 mt-2">Aversion absolue constante</p>
+                    </div>
+
+                    <div class="text-center p-4 border border-grenat rounded-lg hover:shadow-lg transition">
+                        <div class="bg-grenat text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-feather="edit"></i>
+                        </div>
+                        <h4 class="font-bold mb-2">Personnalisée</h4>
+                        <div class="math-equation text-sm">$$U = f(x_1, x_2, \ldots)$$</div>
+                        <p class="text-xs text-gray-500 mt-2">Expression symbolique libre</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 px-4">
+        <div class="container mx-auto">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="font-bold text-lg mb-4 flex items-center">
+                        <span class="text-grenat mr-2">AMS</span>
+                        Advanced Microeconomics Solver
+                    </h3>
+                    <p class="text-gray-400">Solver symbolique généralisé pour l'optimisation microéconomique.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Modules</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="static.html" class="hover:text-white transition">Statique</a></li>
+                        <li><a href="dynamic.html" class="hover:text-white transition">Intertemporel</a></li>
+                        <li><a href="stochastic.html" class="hover:text-white transition">Stochastique</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Documentation</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="documentation.html" class="hover:text-white transition">Guide d'utilisation</a></li>
+                        <li><a href="documentation.html#theory" class="hover:text-white transition">Théorie économique</a></li>
+                        <li><a href="documentation.html#examples" class="hover:text-white transition">Exemples</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Développement</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center">
+                            <i data-feather="code" class="w-4 h-4 mr-2"></i>
+                            <a href="https://github.com/ramanambonona/advanced_microeconomics_solver_backend" class="hover:text-white transition">SymPy, FastAPI</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i data-feather="github" class="w-4 h-4 mr-2"></i>
+                            <a href="https://github.com/ramanambonona/advanced_microeconomics_solver_frontend" class="hover:text-white transition">Open Source</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i data-feather="book-open" class="w-4 h-4 mr-2"></i>
+                            <a href="documentation.html" class="hover:text-white transition">Documentation</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="flex justify-center space-x-3 mt-6">
+                <a href="https://github.com/ramanambonona/" target="_blank" rel="noopener noreferrer" aria-label="Lien vers GitHub">
+                    <div class="bg-grenat hover:bg-pink-600 transition duration-300 rounded-full p-3 shadow-lg">
+                        <i data-feather="github" class="w-6 h-6 text-white"></i>
+                    </div>
+                </a>
+                <a href="http://linkedin.com/in/ambinintsoa-ramanambonona" target="_blank" rel="noopener noreferrer" aria-label="Lien vers LinkedIn">
+                    <div class="bg-grenat hover:bg-pink-600 transition duration-300 rounded-full p-3 shadow-lg">
+                        <i data-feather="linkedin" class="w-6 h-6 text-white"></i>
+                    </div>
+                </a>
+                <a href="/cdn-cgi/l/email-protection#e58488878c8b8c8b91968a84cb908491cb808481d7a58288848c89cb868a88" aria-label="Envoyer un email">
+                    <div class="bg-grenat hover:bg-pink-600 transition duration-300 rounded-full p-3 shadow-lg">
+                        <i data-feather="mail" class="w-6 h-6 text-white"></i>
+                    </div>
+                </a>
+            </div>
+			<div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+                <p>© 2025 Advanced Microeconomics Solver. Ramanambonona Ambinintsoa, PhD.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="assets/js/api.js"></script>
+    <script src="assets/js/static.js"></script>
+    <script>
+        // Configuration MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                packages: {'[+]': ['ams', 'color']}
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+                renderActions: {
+                    addMenu: [0, '', '']
+                }
+            }
+        };
+
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                document.querySelectorAll('.fade-in').forEach(el => {
+                    el.classList.add('fade-in-visible');
+      
