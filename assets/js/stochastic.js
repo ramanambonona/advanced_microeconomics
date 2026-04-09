@@ -400,6 +400,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Display stationary distribution
         if (result.stationary_distribution) {
+            const columnCount = Math.max(1, Math.min(5, result.stationary_distribution.length));
             const stationaryHTML = `
                 <div class="mt-6 result-fade-in">
                     <h4 class="font-bold text-grenat mb-3 text-lg">⚖️ Distribution Stationnaire</h4>
@@ -409,7 +410,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 typeof val === 'number' ? val.toFixed(4) : val
                             ).join(' & ')}
                         \\end{bmatrix}$$</div>
-                        <div class="grid grid-cols-${currentS} gap-2 text-center">
+                        <div class="grid gap-2 text-center" style="grid-template-columns: repeat(${columnCount}, minmax(0, 1fr));">
                             ${result.stationary_distribution.map((prob, index) => `
                                 <div class="bg-white rounded p-2 border">
                                     <div class="text-sm font-medium text-grenat">État ${index + 1}</div>
