@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
         const mobileMenu = document.getElementById('mobileMenu');
 
-        if (mobileMenuButton && mobileMenu) {
+        if (mobileMenuButton && closeMobileMenu && mobileMenuOverlay && mobileMenu) {
             mobileMenuButton.addEventListener('click', function() {
                 mobileMenu.classList.remove('hidden');
                 mobileMenuOverlay.classList.remove('hidden');
@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function initializeMathJax() {
         // Ensure MathJax is properly configured
-        if (window.MathJax) {
+        if (window.MathJax && typeof MathJax.typesetPromise === 'function') {
             MathJax.typesetPromise().catch(err => {
                 console.error('MathJax initialization error:', err);
             });
